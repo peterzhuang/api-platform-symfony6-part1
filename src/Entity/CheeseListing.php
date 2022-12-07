@@ -22,6 +22,9 @@ class CheeseListing
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    /**
+     * The price of this delicious cheese in cents
+     */
     #[ORM\Column]
     private ?int $price = null;
 
