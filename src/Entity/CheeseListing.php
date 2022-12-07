@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\CheeseListingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Carbon\Carbon;
 
 #[ORM\Entity(repositoryClass: CheeseListingRepository::class)]
 #[ApiResource(shortName: 'cheeses', operations: [
@@ -47,6 +48,11 @@ class CheeseListing
     #[ORM\Column]
     private ?bool $isPublished = null;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,9 +75,16 @@ class CheeseListing
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    // public function setDescription(string $description): self
+    // {
+    //     $this->description = $description;
+
+    //     return $this;
+    // }
+
+    public function setTextDescription(string $description): self
     {
-        $this->description = $description;
+        $this->description = nl2br($description);
 
         return $this;
     }
@@ -93,12 +106,17 @@ class CheeseListing
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function getCreatedAtAgo(): string
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        return Carbon::instance($this->getCreatedAt())->diffForHumans();
     }
+
+    // public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    // {
+    //     $this->createdAt = $createdAt;
+
+    //     return $this;
+    // }
 
     public function isIsPublished(): ?bool
     {
