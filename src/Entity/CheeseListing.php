@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Carbon\Carbon;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: CheeseListingRepository::class)]
 #[ApiResource(shortName: 'cheeses', operations: [
@@ -55,9 +56,10 @@ class CheeseListing
     #[ORM\Column]
     private ?bool $isPublished = false;
 
-    public function __construct()
+    public function __construct(string $title)
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->title = $title;
     }
 
     public function getId(): ?int
@@ -70,12 +72,12 @@ class CheeseListing
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
+    // public function setTitle(string $title): self
+    // {
+    //     $this->title = $title;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getDescription(): ?string
     {
@@ -93,6 +95,7 @@ class CheeseListing
      * The description of the cheese as as raw text.
      */    
     #[Groups(['cheese_listing:write'])]
+    #[SerializedName('description')]
     public function setTextDescription(string $description): self
     {
         $this->description = nl2br($description);
