@@ -36,6 +36,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 ],
 normalizationContext: ['groups' => ['cheese_listing:read'], 'swagger_definition_name' => 'Read'],
 denormalizationContext: ['groups' => ['cheese_listing:write'], 'swagger_definition_name' => 'Write'],
+paginationItemsPerPage: 10
 )]
 class CheeseListing
 {
