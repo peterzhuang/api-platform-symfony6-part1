@@ -48,7 +48,7 @@ class CheeseListing
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read'])]
+    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read', 'user:write'])]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max:50, maxMessage: "Describe your cheese in 50 chars or less")]
     private ?string $title = null;
@@ -62,7 +62,7 @@ class CheeseListing
      * The price of this delicious cheese in cents
      */
     #[ORM\Column]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read'])]
+    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read', 'user:write'])]
     #[Assert\NotBlank()]
     private ?int $price = null;
 
@@ -125,7 +125,7 @@ class CheeseListing
     /**
      * The description of the cheese as as raw text.
      */    
-    #[Groups(['cheese_listing:write'])]
+    #[Groups(['cheese_listing:write', 'user:write'])]
     #[SerializedName('description')]
     public function setTextDescription(string $description): self
     {
