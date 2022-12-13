@@ -75,6 +75,7 @@ class CheeseListing
     #[ORM\ManyToOne(inversedBy: 'cheeseListings')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Assert\Valid()]
     private ?User $owner = null;
 
     public function __construct(string $title)
