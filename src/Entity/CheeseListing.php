@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Carbon\Carbon;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CheeseListingRepository::class)]
 #[ApiFilter(BooleanFilter::class, properties: ['isPublished'])]
@@ -48,10 +49,13 @@ class CheeseListing
 
     #[ORM\Column(length: 255)]
     #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max:50, maxMessage: "Describe your cheese in 50 chars or less")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['cheese_listing:read'])]
+    #[Assert\NotBlank()]
     private ?string $description = null;
 
     /**
@@ -59,6 +63,7 @@ class CheeseListing
      */
     #[ORM\Column]
     #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Assert\NotBlank()]
     private ?int $price = null;
 
     #[ORM\Column]
