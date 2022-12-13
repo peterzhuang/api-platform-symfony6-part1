@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Link;
 
 #[ORM\Entity(repositoryClass: CheeseListingRepository::class)]
 #[ApiFilter(BooleanFilter::class, properties: ['isPublished'])]
@@ -39,6 +40,17 @@ normalizationContext: ['groups' => ['cheese_listing:read'], 'swagger_definition_
 denormalizationContext: ['groups' => ['cheese_listing:write'], 'swagger_definition_name' => 'Write'],
 paginationItemsPerPage: 10,
 formats: ['json', 'html', 'jsonhal', 'jsonld', 'csv' => ['text/csv']]
+)]
+#[ApiResource(
+    shortName: 'cheeses',
+    uriTemplate: '/users/{id}/cheeses.{_format}',
+    uriVariables: [
+        'id' => new Link(
+            fromClass: User::class, 
+            fromProperty: 'cheeseListings'           
+        )        
+    ],
+    operations: [new GetCollection()]
 )]
 class CheeseListing
 {
