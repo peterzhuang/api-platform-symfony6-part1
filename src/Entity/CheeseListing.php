@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(RangeFilter::class, properties: ['price'])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiResource(shortName: 'cheeses', operations: [
-    new Get(), 
+    new Get(normalizationContext: ['groups' => ['cheese_listing:read', 'cheese_listing:item:get']]), 
     new Post(), 
     new GetCollection(),
     new Put(),
@@ -48,7 +48,7 @@ class CheeseListing
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read'])]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max:50, maxMessage: "Describe your cheese in 50 chars or less")]
     private ?string $title = null;
@@ -62,7 +62,7 @@ class CheeseListing
      * The price of this delicious cheese in cents
      */
     #[ORM\Column]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read'])]
     #[Assert\NotBlank()]
     private ?int $price = null;
 
