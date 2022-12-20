@@ -30,11 +30,11 @@ use ApiPlatform\Metadata\Link;
 #[ApiFilter(PropertyFilter::class)]
 #[ApiResource(shortName: 'cheeses', operations: [
     new Get(normalizationContext: ['groups' => ['cheese_listing:read', 'cheese_listing:item:get']]), 
-    new Post(), 
+    new Post(security: "is_granted('ROLE_USER')"), 
     new GetCollection(),
-    new Put(),
+    new Put(security: "is_granted('ROLE_USER')"),
     new Patch(),
-    new Delete(),
+    new Delete(security: "is_granted('ROLE_ADMIN')"),
 ],
 normalizationContext: ['groups' => ['cheese_listing:read'], 'swagger_definition_name' => 'Read'],
 denormalizationContext: ['groups' => ['cheese_listing:write'], 'swagger_definition_name' => 'Write'],
