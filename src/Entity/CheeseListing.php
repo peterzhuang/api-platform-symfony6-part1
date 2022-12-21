@@ -32,7 +32,9 @@ use ApiPlatform\Metadata\Link;
     new Get(normalizationContext: ['groups' => ['cheese_listing:read', 'cheese_listing:item:get']]), 
     new Post(security: "is_granted('ROLE_USER')"), 
     new GetCollection(),
-    new Put(security: "is_granted('ROLE_USER')"),
+    new Put(
+        security: "is_granted('ROLE_USER') and object.getOwner() == user",
+        securityMessage: "only the creator can edit a cheese listing"),
     new Patch(),
     new Delete(security: "is_granted('ROLE_ADMIN')"),
 ],
