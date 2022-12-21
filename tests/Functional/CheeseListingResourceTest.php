@@ -74,10 +74,23 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $em->persist($cheeseListing);
         $em->flush();
 
+        //  test: only the creator can edit a cheese listing
         $this->logIn($client, 'user2@example.com', 'foo');
         $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
             'json' => [
                 'title' => 'updated',
+                'owner' => '/api/users/'.$user2->getId()
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+        // var_dump($client->getResponse()->getContent(false));
+
+        //  test: creator can not re-assign cheese listing to other owner
+        $this->logIn($client, 'user1@example.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'title' => 'updated',
+                'owner' => '/api/users/'.$user2->getId()
             ]
         ]);
         $this->assertResponseStatusCodeSame(403);

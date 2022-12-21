@@ -34,7 +34,9 @@ use ApiPlatform\Metadata\Link;
     new GetCollection(),
     new Put(
         security: "is_granted('ROLE_USER') and object.getOwner() == user",
-        securityMessage: "only the creator can edit a cheese listing"),
+        securityMessage: "only the creator can edit a cheese listing",
+        securityPostDenormalize: "is_granted('ROLE_USER') and object.getOwner() == user and previous_object.getOwner() == user",
+        securityPostDenormalizeMessage: 'creator can not re-assign cheese listing to other owner'),
     new Patch(),
     new Delete(security: "is_granted('ROLE_ADMIN')"),
 ],
