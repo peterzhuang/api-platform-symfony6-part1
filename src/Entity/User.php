@@ -56,8 +56,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['user:write'])]
+    // #[Groups(['user:write'])]
     private ?string $password = null;
+
+    #[Groups(['user:write'])]
+    private ?string $plainPassword;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Groups(['user:read', 'user:write', 'cheese_listing:item:get', 'cheese_listing:write'])]
@@ -135,13 +138,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+
     /**
      * @see UserInterface
      */
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getUsername(): ?string
