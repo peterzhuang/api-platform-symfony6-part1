@@ -31,7 +31,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(security: "is_granted('ROLE_USER') and object == user"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(),
-        new Post(security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(
+            security: "is_granted('PUBLIC_ACCESS')",
+            validationContext: ['groups' => ['Default', 'create']],
+        ),
     ], 
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
@@ -64,7 +67,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[SerializedName("password")]
     #[Groups(['user:write'])]
-    private ?string $plainPassword;
+    #[Assert\NotBlank(groups: ['create'])]
+    private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Groups(['user:read', 'user:write', 'cheese_listing:item:get', 'cheese_listing:write'])]
@@ -143,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
