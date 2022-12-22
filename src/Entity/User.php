@@ -82,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $cheeseListings;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['admin:read', 'user:write'])]
     private ?string $phoneNumber = null;
 
     public function __construct()
