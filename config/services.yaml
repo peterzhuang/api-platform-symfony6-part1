@@ -26,7 +26,11 @@ services:
     App\Serializer\AdminGroupsContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@App\Serializer\AdminGroupsContextBuilder.inner' ]
-        autoconfigure: false        
+
+    App\ApiPlatform\AutoGroupResourceMetadataCollectionFactory:
+        decorates: 'api_platform.metadata.resource.metadata_collection_factory'
+        arguments: [ '@App\ApiPlatform\AutoGroupResourceMetadataCollectionFactory.inner' ]
+        decoration_priority: -20
 
 when@test:
     services:

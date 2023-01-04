@@ -28,8 +28,8 @@ use ApiPlatform\Metadata\Link;
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'description' => 'partial', 'owner' => 'exact', 'owner.username' => 'partial'])]
 #[ApiFilter(RangeFilter::class, properties: ['price'])]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiResource(shortName: 'cheeses', operations: [
-    new Get(normalizationContext: ['groups' => ['cheese_listing:read', 'cheese_listing:item:get']]), 
+#[ApiResource(shortName: 'cheese', operations: [
+    new Get(normalizationContext: ['groups' => ['cheese:read', 'cheese:item:get']]), 
     new Post(security: "is_granted('ROLE_USER')"), 
     new GetCollection(),
     new Put(
@@ -40,8 +40,8 @@ use ApiPlatform\Metadata\Link;
     new Patch(),
     new Delete(security: "is_granted('ROLE_ADMIN')"),
 ],
-normalizationContext: ['groups' => ['cheese_listing:read'], 'swagger_definition_name' => 'Read'],
-denormalizationContext: ['groups' => ['cheese_listing:write'], 'swagger_definition_name' => 'Write'],
+// normalizationContext: ['groups' => ['cheese:read'], 'swagger_definition_name' => 'Read'],
+// denormalizationContext: ['groups' => ['cheese:write'], 'swagger_definition_name' => 'Write'],
 paginationItemsPerPage: 10,
 formats: ['json', 'html', 'jsonhal', 'jsonld', 'csv' => ['text/csv']]
 )]
@@ -64,13 +64,13 @@ class CheeseListing
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read', 'user:write'])]
+    #[Groups(['cheese:read', 'cheese:write', 'user:read', 'user:write'])]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max:50, maxMessage: "Describe your cheese in 50 chars or less")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['cheese_listing:read'])]
+    #[Groups(['cheese:read'])]
     #[Assert\NotBlank()]
     private ?string $description = null;
 
@@ -78,7 +78,7 @@ class CheeseListing
      * The price of this delicious cheese in cents
      */
     #[ORM\Column]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write', 'user:read', 'user:write'])]
+    #[Groups(['cheese:read', 'cheese:write', 'user:read', 'user:write'])]
     #[Assert\NotBlank()]
     private ?int $price = null;
 
@@ -90,7 +90,7 @@ class CheeseListing
 
     #[ORM\ManyToOne(inversedBy: 'cheeseListings')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['cheese_listing:read', 'cheese_listing:write'])]
+    #[Groups(['cheese:read', 'cheese:write'])]
     #[Assert\Valid()]
     private ?User $owner = null;
 
@@ -122,7 +122,7 @@ class CheeseListing
         return $this->description;
     }
     
-    #[Groups(['cheese_listing:read'])]
+    #[Groups(['cheese:read'])]
     public function getShortDescription(): ?string
     {
         if (strlen($this->description) < 40) {
@@ -141,7 +141,7 @@ class CheeseListing
     /**
      * The description of the cheese as as raw text.
      */    
-    #[Groups(['cheese_listing:write', 'user:write'])]
+    #[Groups(['cheese:write', 'user:write'])]
     #[SerializedName('description')]
     public function setTextDescription(string $description): self
     {
@@ -170,7 +170,7 @@ class CheeseListing
     /**
      * How long ago in text that this cheese listing was added.
      */
-    #[Groups(['cheese_listing:read'])]
+    #[Groups(['cheese:read'])]
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance($this->getCreatedAt())->diffForHumans();

@@ -36,8 +36,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             validationContext: ['groups' => ['Default', 'create']],
         ),
     ], 
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']],
+    // normalizationContext: ['groups' => ['user:read']],
+    // denormalizationContext: ['groups' => ['user:write']],
     processor: UserDataProcessor::class,
 )]
 #[UniqueEntity(fields: ['username', 'email'])]
@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['user:read', 'user:write', 'cheese_listing:item:get', 'cheese_listing:write'])]
+    #[Groups(['user:read', 'user:write', 'cheese:item:get', 'cheese:write'])]
     #[Assert\NotBlank()]
     private ?string $username = null;
 
