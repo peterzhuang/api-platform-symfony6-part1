@@ -50,24 +50,25 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $authenticatedUser = $this->createUserAndLogIn($client, 'cheeseplease@example.com', 'foo');
         $otherUser = $this->createUser('otheruser@example.com', 'foo');
 
-        $client->request('POST', '/api/cheeses', [
-            // 'headers' => ['Content-Type' => 'application/json'],
-            'json' => [],
-           ]);
-    
-           $this->assertResponseStatusCodeSame(400);
-
         $cheesyData = [
             'title' => 'Mystery cheese... kinda green',
             'description' => 'What mysteries does it hold?',
             'price' => 5000
         ];
+
+        $client->request('POST', '/api/cheeses', [
+            // 'headers' => ['Content-Type' => 'application/json'],
+            'json' => $cheesyData,
+           ]);
+    
+           $this->assertResponseStatusCodeSame(422, 'missing owner field');
+
         $client->request('POST', '/api/cheeses', [
             // 'headers' => ['Content-Type' => 'application/json'],
             'json' => $cheesyData + ['owner' => '/api/users/'.$otherUser->getId()],
            ]);
     
-           $this->assertResponseStatusCodeSame(400, 'not passing the correct owner');
+           $this->assertResponseStatusCodeSame(422, 'not passing the correct owner');
 
         $client->request('POST', '/api/cheeses', [
         // 'headers' => ['Content-Type' => 'application/json'],

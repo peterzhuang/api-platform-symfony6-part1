@@ -93,6 +93,7 @@ class CheeseListing
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['cheese:read', 'cheese:write', 'cheese:collection:post'])]
     #[IsValidOwner()]
+    #[Assert\NotBlank()]
     private ?User $owner = null;
 
     public function __construct(string $title)
