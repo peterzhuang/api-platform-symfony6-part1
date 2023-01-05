@@ -61,7 +61,8 @@ class CheeseListingResourceTest extends CustomApiTestCase
             'json' => $cheesyData,
            ]);
     
-           $this->assertResponseStatusCodeSame(422, 'missing owner field');
+        //    $this->assertResponseStatusCodeSame(422, 'missing owner field');
+        $this->assertResponseStatusCodeSame(201);
 
         $client->request('POST', '/api/cheeses', [
             // 'headers' => ['Content-Type' => 'application/json'],

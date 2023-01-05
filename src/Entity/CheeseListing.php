@@ -22,9 +22,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\Link;
+use App\Doctrine\CheeseListingSetOwnerListener;
 use App\Validator\IsValidOwner;
 
 #[ORM\Entity(repositoryClass: CheeseListingRepository::class)]
+#[ORM\EntityListeners([CheeseListingSetOwnerListener::class])]
 #[ApiFilter(BooleanFilter::class, properties: ['isPublished'])]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'description' => 'partial', 'owner' => 'exact', 'owner.username' => 'partial'])]
 #[ApiFilter(RangeFilter::class, properties: ['price'])]
@@ -93,7 +95,7 @@ class CheeseListing
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['cheese:read', 'cheese:write', 'cheese:collection:post'])]
     #[IsValidOwner()]
-    #[Assert\NotBlank()]
+    // #[Assert\NotBlank()]
     private ?User $owner = null;
 
     public function __construct(string $title)
