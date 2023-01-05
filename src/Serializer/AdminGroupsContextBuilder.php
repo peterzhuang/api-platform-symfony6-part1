@@ -26,11 +26,16 @@ final class AdminGroupsContextBuilder implements SerializerContextBuilderInterfa
         // if ($resourceClass === Book::class && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_ADMIN') && false === $normalization) {
         //     $context['groups'][] = 'admin:input';
         // }
+
+        $context['groups'] = $context['groups'] ?? [];
+
         $isAdmin = $this->authorizationChecker->isGranted('ROLE_ADMIN');
 
-        if ($context['groups'] && $isAdmin ) {
+        if ( $isAdmin ) {
             $context['groups'][] = $normalization ? 'admin:read' : 'admin:write';
         }
+
+        $context['groups'] = array_unique($context['groups']);
 
         return $context;
     }
