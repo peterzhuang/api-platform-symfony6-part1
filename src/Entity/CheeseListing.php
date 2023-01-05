@@ -90,8 +90,7 @@ class CheeseListing
 
     #[ORM\ManyToOne(inversedBy: 'cheeseListings')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['cheese:read', 'cheese:write'])]
-    #[Assert\Valid()]
+    #[Groups(['cheese:read', 'cheese:write', 'cheese:collection:post'])]
     private ?User $owner = null;
 
     public function __construct(string $title)
